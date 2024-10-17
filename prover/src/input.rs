@@ -17,10 +17,10 @@ pub struct Game2048Input {
     pub packed_dir: String,
     pub direction: Vec<u8>,
     pub address: String,
-    pub nonce: String,
     pub step: u64,
     #[serde(rename = "stepAfter")]
     pub step_after: u64,
+    pub nonce: String,
 }
 
 const BOARD_STEP: u32 = 32;
@@ -65,17 +65,17 @@ pub fn encode_prove_inputs(inputs: &[Game2048Input]) -> String {
 
         let packed_dir = Token::Uint(U256::from_dec_str(&input.packed_dir).unwrap());
         let address = Token::Uint(U256::from_dec_str(&input.address).unwrap());
-        let nonce = Token::Uint(U256::from_dec_str(&input.nonce).unwrap());
         let step = Token::Uint(U256::from(input.step));
         let step_after = Token::Uint(U256::from(input.step_after));
+        let nonce = Token::Uint(U256::from_dec_str(&input.nonce).unwrap());
 
         t_inputs.push(Token::FixedArray(vec![
             Token::Array(packed_board),
             packed_dir,
             address,
-            nonce,
             step,
             step_after,
+            nonce,
         ]));
     }
 
@@ -89,9 +89,9 @@ pub fn decode_prove_inputs(bytes: &[u8]) -> Result<Vec<Input>, anyhow::Error> {
             ParamType::Array(Box::new(ParamType::Uint(256))), // packed_board
             ParamType::Uint(256),                             // packed_dir
             ParamType::Uint(256),                             // address
-            ParamType::Uint(256),                             // nonce
             ParamType::Uint(256),                             // step
             ParamType::Uint(256),                             // step_after
+            ParamType::Uint(256),                             // nonce
         ])))],
         bytes,
     )?;
@@ -118,9 +118,9 @@ pub fn decode_prove_inputs(bytes: &[u8]) -> Result<Vec<Input>, anyhow::Error> {
         let packed_dir = f_uint(packed_token);
 
         let address = f_uint(token[2].clone());
-        let nonce = f_uint(token[3].clone());
-        let step = f_uint(token[4].clone());
-        let step_after = f_uint(token[5].clone());
+        let step = f_uint(token[3].clone());
+        let step_after = f_uint(token[4].clone());
+        let nonce = f_uint(token[5].clone());
 
         let mut maps = HashMap::new();
         maps.insert("board".to_string(), board);
@@ -136,38 +136,6 @@ pub fn decode_prove_inputs(bytes: &[u8]) -> Result<Vec<Input>, anyhow::Error> {
     }
 
     Ok(inputs)
-}
-
-pub fn decode_prove_publics(bytes: &[u8]) -> Result<Vec<Vec<Fr>>, anyhow::Error> {
-    let mut input_tokens = decode(
-        &[ParamType::Array(Box::new(ParamType::FixedArray(
-            Box::new(ParamType::Uint(256)),
-            7,
-        )))],
-        bytes,
-    )?;
-    let tokens = input_tokens
-        .pop()
-        .ok_or_else(|| anyhow!("Infallible point"))?
-        .into_array()
-        .ok_or_else(|| anyhow!("Infallible point"))?;
-    let mut publics = vec![];
-    for token in tokens {
-        let ffs = token
-            .into_fixed_array()
-            .ok_or_else(|| anyhow!("Infallible point"))?;
-        let mut public = vec![];
-        for fs in ffs {
-            let mut bytes = [0u8; 32];
-            fs.into_uint().unwrap().to_big_endian(&mut bytes);
-            let f = Fr::from_be_bytes_mod_order(&bytes);
-            public.push(f);
-        }
-
-        publics.push(public);
-    }
-
-    Ok(publics)
 }
 
 #[cfg(test)]
@@ -254,5 +222,7 @@ mod test {
         let input_hex = hex.trim_start_matches("0x");
         let input_bytes = hex::decode(input_hex).expect("Unable to decode input file");
         decode_prove_inputs(&input_bytes).expect("Unable to decode input");
+
+        decode_prove_outputs()
     }
 }

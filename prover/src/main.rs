@@ -2,9 +2,9 @@ mod input;
 
 use ark_circom::zkp::{
     init_bn254_circom_from_bytes, init_bn254_params_from_bytes, multiple_proofs_to_abi_bytes,
-    prove_bn254, verify_bn254,
+    prove_bn254, verify_bn254, decode_multiple_prove_publics
 };
-use input::{decode_prove_inputs, decode_prove_publics};
+use input::{decode_prove_inputs};
 
 const WASM_BYTES: &[u8] = include_bytes!("../../../materials/game2048_60.wasm");
 const R1CS_BYTES: &[u8] = include_bytes!("../../../materials/game2048_60.r1cs");
@@ -14,7 +14,7 @@ const ZKEY_BYTES: &[u8] = include_bytes!("../../../materials/game2048_60.zkey");
 // const R1CS_BYTES: &[u8] = include_bytes!("../materials/game2048_60_bls.r1cs");
 // const ZKEY_BYTES: &[u8] = include_bytes!("../materials/game2048_60_bls.zkey");
 
-/// INPUT=test_input OUTPUT=test_output PROOF=test_proof cargo run --release
+/// INPUT=http://localhost:9098/tasks/1 cargo run --release
 #[tokio::main]
 async fn main() {
     let input_path = std::env::var("INPUT").expect("env INPUT missing");
@@ -33,7 +33,7 @@ async fn main() {
     let publics_bytes = &bytes[input_len + 4..];
 
     let inputs = decode_prove_inputs(input_bytes).expect("Unable to decode inputs");
-    let publics = decode_prove_publics(publics_bytes).expect("Unable to decode publics");
+    let publics = decode_multiple_prove_publics(publics_bytes, 7).expect("Unable to decode publics");
     assert_eq!(inputs.len(), publics.len());
 
     let mut proofs = vec![];
