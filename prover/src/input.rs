@@ -1,9 +1,6 @@
 use std::collections::HashMap;
 
-use anyhow::anyhow;
-use ark_bn254::Fr;
 use ark_circom::zkp::Input;
-use ark_ff::PrimeField;
 use ethabi::{decode, encode, ethereum_types::U256, ParamType, Token};
 use num_bigint::{BigInt, Sign};
 use serde::{Deserialize, Serialize};
@@ -69,14 +66,15 @@ pub fn encode_prove_inputs(inputs: &[Game2048Input]) -> String {
         let step_after = Token::Uint(U256::from(input.step_after));
         let nonce = Token::Uint(U256::from_dec_str(&input.nonce).unwrap());
 
-        t_inputs.push(Token::FixedArray(vec![
-            Token::Array(packed_board),
+        packed_board.extend([
             packed_dir,
             address,
             step,
             step_after,
             nonce,
-        ]));
+        ]);
+
+        t_inputs.push(Token::FixedArray(packed_board));
     }
 
     let bytes = encode(&[Token::Array(t_inputs)]);
@@ -86,7 +84,8 @@ pub fn encode_prove_inputs(inputs: &[Game2048Input]) -> String {
 pub fn decode_prove_inputs(bytes: &[u8]) -> Result<Vec<Input>, anyhow::Error> {
     let mut input_tokens = decode(
         &[ParamType::Array(Box::new(ParamType::Tuple(vec![
-            ParamType::Array(Box::new(ParamType::Uint(256))), // packed_board
+            ParamType::Uint(256),                             // packed_board_1
+            ParamType::Uint(256),                             // packed_board_2
             ParamType::Uint(256),                             // packed_dir
             ParamType::Uint(256),                             // address
             ParamType::Uint(256),                             // step
@@ -106,21 +105,24 @@ pub fn decode_prove_inputs(bytes: &[u8]) -> Result<Vec<Input>, anyhow::Error> {
     let mut inputs = vec![];
     for t_token in tokens {
         let token = t_token.into_tuple().unwrap();
+
         let mut board = vec![];
         let mut packed_board = vec![];
-        for x in token[0].clone().into_array().unwrap() {
-            board.extend(unpack(x.clone(), BOARD_STEP, BOARD_LEN));
-            packed_board.push(f_uint(x));
-        }
+        let packed_board_1 = token[0].clone();
+        let packed_board_2 = token[1].clone();
+        board.extend(unpack(packed_board_1.clone(), BOARD_STEP, BOARD_LEN));
+        board.extend(unpack(packed_board_2.clone(), BOARD_STEP, BOARD_LEN));
+        packed_board.push(f_uint(packed_board_1));
+        packed_board.push(f_uint(packed_board_2));
 
-        let packed_token = token[1].clone();
+        let packed_token = token[2].clone();
         let direction = unpack(packed_token.clone(), DIR_STEP, DIR_LEN);
         let packed_dir = f_uint(packed_token);
 
-        let address = f_uint(token[2].clone());
-        let step = f_uint(token[3].clone());
-        let step_after = f_uint(token[4].clone());
-        let nonce = f_uint(token[5].clone());
+        let address = f_uint(token[3].clone());
+        let step = f_uint(token[4].clone());
+        let step_after = f_uint(token[5].clone());
+        let nonce = f_uint(token[6].clone());
 
         let mut maps = HashMap::new();
         maps.insert("board".to_string(), board);
@@ -222,7 +224,5 @@ mod test {
         let input_hex = hex.trim_start_matches("0x");
         let input_bytes = hex::decode(input_hex).expect("Unable to decode input file");
         decode_prove_inputs(&input_bytes).expect("Unable to decode input");
-
-        decode_prove_outputs()
     }
 }
