@@ -9,7 +9,7 @@ const { attachContract, sleep } = require("./address_utils.js");
 const { writeFile } = require('fs');
 
 const NAME = "Game2048Step60CircomVerifier";
-const ADDR = "0xd64b51e6f5db063c9532bfc5f9f3472265771827";
+const ADDR = "0x5b92b011513f9aaf8f6541003dc088625e7438e8";
 
 async function upgrade() {
   const C = await ethers.getContractFactory(NAME);

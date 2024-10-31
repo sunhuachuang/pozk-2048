@@ -30,7 +30,7 @@ module.exports = {
       accounts: [LOCAL_SK1, LOCAL_SK2, LOCAL_SK3, LOCAL_SK4]
     },
     testnet: {
-      url: 'https://linea-testnet-zytron.zypher.game',
+      url: 'https://linea-mainnet-zytron.zypher.game', //'https://linea-testnet-zytron.zypher.game',
       accounts: [SECRET_KEY]
     },
     mainnet: {
