@@ -21,6 +21,7 @@ async function deployContractWithProxy(name, params=[]) {
 
 async function deploy() {
   const shuffle = await deployContractWithProxy("Game2048Step60CircomVerifier", []);
+  // opbnbtestnet 0x0eaca2011742c5156f217f1b1d0784fe5fbf2428
 }
 
 async function main() {

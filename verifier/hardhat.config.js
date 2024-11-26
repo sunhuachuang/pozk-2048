@@ -30,15 +30,15 @@ module.exports = {
       accounts: [LOCAL_SK1, LOCAL_SK2, LOCAL_SK3, LOCAL_SK4]
     },
     testnet: {
-      url: 'https://linea-mainnet-zytron.zypher.game', //'https://linea-testnet-zytron.zypher.game',
+      url: 'https://opbnb-testnet-rpc.bnbchain.org',
       accounts: [SECRET_KEY]
     },
     mainnet: {
-      url: 'https://linea-mainnet-zytron.zypher.game',
+      url: 'https://rpc.zypher.network',
       accounts: [SECRET_KEY]
     },
     l2testnet: {
-      url: 'https://rpc.sepolia.linea.build',
+      url: 'https://opbnb-testnet-rpc.bnbchain.org',
       accounts: [SECRET_KEY]
     },
     l2: {
