@@ -219,10 +219,15 @@ mod test {
         unpack_direction(&input.packed_dir);
 
         let hex = encode_prove_inputs(&[input.clone(), input]);
-        println!("{}", hex);
+        std::fs::write("./test_miner", format!("{}\n{}", hex, hex)).unwrap();
 
-        let input_hex = hex.trim_start_matches("0x");
-        let input_bytes = hex::decode(input_hex).expect("Unable to decode input file");
-        decode_prove_inputs(&input_bytes).expect("Unable to decode input");
+        let inputs_hex = hex.trim_start_matches("0x");
+        let inputs_bytes = hex::decode(inputs_hex).expect("Unable to decode input file");
+        decode_prove_inputs(&inputs_bytes).expect("Unable to decode input");
+
+        let mut bytes = (inputs_bytes.len() as u32).to_be_bytes().to_vec();
+        bytes.extend(inputs_bytes.clone());
+        bytes.extend(inputs_bytes);
+        std::fs::write("./test_inputs", bytes).unwrap();
     }
 }
