@@ -7,8 +7,13 @@
 const { ethers, upgrades, network } = require("hardhat");
 const { writeFile } = require('fs');
 
-// opbnbtestnet
-const ADDR = "0x0eaca2011742c5156f217f1b1d0784fe5fbf2428";
+// testnet
+const ADDR = "0x8aCF473885f975023e7A9B7C043Da53D690cbc6E";
+
+// l2testnet
+// const ADDR = "0x759F53f089e644B9459C665231B8CBb188199C13";
+
+// mainnet
 
 async function deployContractWithProxy(name, params=[]) {
   const Factory = await ethers.getContractFactory(name);
@@ -22,7 +27,7 @@ async function deployContractWithProxy(name, params=[]) {
 }
 
 async function deploy() {
-  const shuffle = await deployContractWithProxy("Game2048Step60CircomVerifier", []);
+  const _c = await deployContractWithProxy("Game2048Step60CircomVerifier", []);
 }
 
 async function upgrade() {
