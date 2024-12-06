@@ -6,7 +6,8 @@
 // global scope, and execute the script.
 const { ethers, upgrades, network } = require("hardhat");
 
-const ADDR = "0x5b92b011513f9aaf8f6541003dc088625e7438e8";
+// opbnbtestnet
+const ADDR = "0x0eaca2011742c5156f217f1b1d0784fe5fbf2428";
 
 async function testVerify() {
   const C = await ethers.getContractFactory("Game2048Step60CircomVerifier");

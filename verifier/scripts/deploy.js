@@ -5,8 +5,10 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 const { ethers, upgrades, network } = require("hardhat");
-const { attachContract, sleep } = require("./address_utils.js");
 const { writeFile } = require('fs');
+
+// opbnbtestnet
+const ADDR = "0x0eaca2011742c5156f217f1b1d0784fe5fbf2428";
 
 async function deployContractWithProxy(name, params=[]) {
   const Factory = await ethers.getContractFactory(name);
@@ -21,11 +23,20 @@ async function deployContractWithProxy(name, params=[]) {
 
 async function deploy() {
   const shuffle = await deployContractWithProxy("Game2048Step60CircomVerifier", []);
-  // opbnbtestnet 0x0eaca2011742c5156f217f1b1d0784fe5fbf2428
+}
+
+async function upgrade() {
+  console.log("upgrading...");
+  const C = await ethers.getContractFactory("Game2048Step60CircomVerifier");
+  const address = await C.attach(ADDR);
+  const Factory = await ethers.getContractFactory("Game2048Step60CircomVerifier");
+  await upgrades.upgradeProxy(address, Factory);
+  console.log("upgraded");
 }
 
 async function main() {
   await deploy();
+  // await upgrade();
 }
 
 // We recommend this pattern to be able to use async/await everywhere

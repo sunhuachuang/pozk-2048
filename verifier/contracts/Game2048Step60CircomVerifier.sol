@@ -69,8 +69,8 @@ contract Game2048Step60CircomVerifier is Initializable, OwnableUpgradeable, ERC1
         return "2048";
     }
 
-    function permission() external view returns (bool) {
-        return false;
+    function permission(address _sender) external view returns (bool) {
+        return true;
     }
 
     /// show how to serialize/deseriaze the inputs params
