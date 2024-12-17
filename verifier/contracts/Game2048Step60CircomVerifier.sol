@@ -85,6 +85,10 @@ contract Game2048Step60CircomVerifier is Initializable, OwnableUpgradeable, ERC1
         return "uint256[7][]";
     }
 
+    function types() external pure returns (string memory) {
+        return "zk";
+    }
+
     struct Proof {
         uint[2] _pA;
         uint[2][2] _pB;

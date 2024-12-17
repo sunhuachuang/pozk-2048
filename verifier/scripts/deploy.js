@@ -40,8 +40,8 @@ async function upgrade() {
 }
 
 async function main() {
-  await deploy();
-  // await upgrade();
+  // await deploy();
+  await upgrade();
 }
 
 // We recommend this pattern to be able to use async/await everywhere

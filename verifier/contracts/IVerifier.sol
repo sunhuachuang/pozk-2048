@@ -18,4 +18,8 @@ interface IVerifier {
     /// show how to serialize/deserialize the publics params
     /// e.g. "uint256,bytes32,string,bytes32[],address[],ipfs"
     function publics() external pure returns (string memory);
+
+    /// show the prover supported types
+    /// e.g. "zk", "risc0,sp1", "candle,ollama"
+    function types() external pure returns (string memory);
 }
