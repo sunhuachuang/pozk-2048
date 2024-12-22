@@ -76,7 +76,7 @@ contract Game2048Step60CircomVerifier is Initializable, OwnableUpgradeable, ERC1
     /// show how to serialize/deseriaze the inputs params
     /// e.g. "uint256,bytes32,string,bytes32[],address[],ipfs"
     function inputs() external pure returns (string memory) {
-        return "(bytes[],uint256[],uint256,bytes,uint256,uint256,uint256,uint256)[]";
+        return "uint256[7][]";
     }
 
     /// show how to serialize/deserialize the publics params
