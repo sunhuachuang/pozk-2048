@@ -1,5 +1,8 @@
 # pozk-2048
 
+- PoZK testnet prover: `0x8aCF473885f975023e7A9B7C043Da53D690cbc6E`
+- PoZK mainnet prover: `Coming soon`
+
 ## Serialize (ABI encode/decode)
 - Inputs (bytes)
 ```
