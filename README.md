@@ -23,7 +23,7 @@ e.g.
 }
 ```
 
-- Outpus (bytes)
+- Publics (bytes)
 ```
 uint256[7]
 
