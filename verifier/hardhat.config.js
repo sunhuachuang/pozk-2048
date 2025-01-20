@@ -29,20 +29,20 @@ module.exports = {
       url: 'http://127.0.0.1:8545',
       accounts: [LOCAL_SK1, LOCAL_SK2, LOCAL_SK3, LOCAL_SK4]
     },
-    testnet: {
+    zytrontestnet: {
       url: 'https://rpc-testnet.zypher.network',
       accounts: [SECRET_KEY]
     },
-    mainnet: {
+    zytron: {
       url: 'https://rpc.zypher.network',
       accounts: [SECRET_KEY]
     },
-    l2testnet: {
-      url: 'https://rpc.sepolia.linea.build',
+    basesepolia: {
+      url: 'https://sepolia.base.org',
       accounts: [SECRET_KEY]
     },
-    l2: {
-      url: 'https://rpc.linea.build',
+    base: {
+      url: 'https://mainnet.base.org',
       accounts: [SECRET_KEY]
     },
   },
